@@ -5,11 +5,13 @@ import 'package:pace/home_page/home_page_widget.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pace/sign_in_widget/sign_in_widget.dart';
+import 'package:pace/splash_page/splash_page_widget.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'journal_page/journal_page_widget.dart';
 import 'forums_page/forums_page_widget.dart';
 import 'home_page/home_page_widget.dart';
 import 'chill_page/chill_page_widget.dart';
+import 'on_boarding/on_boarding.dart';
 import 'profile_page/profile_page_widget.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 
@@ -27,7 +29,14 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -41,9 +50,17 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [Locale('en', '')],
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: SignInWidget(),
-    );
+      home: FutureBuilder(
+    future: Init.instance.initialize(),
+    builder: (context, AsyncSnapshot snapshot) {
+    // Show splash screen while waiting for app resources to load:
+    if (snapshot.connectionState == ConnectionState.waiting) {
+    return const MaterialApp(home: SplashPageWidget());
+    } else return Onboarding1Widget();
   }
+  )
+    );
+}
 }
 
 class NavBarPage extends StatefulWidget {

@@ -29,24 +29,28 @@ dependencies:
   built_collection: ^5.0.0
   built_value: ^8.0.6
   cached_network_image: ^3.1.0
+  cloud_firestore: ^2.5.4
+  firebase_auth: ^3.0.1
+  firebase_core: ^1.4.0
   flutter_datetime_picker: 1.5.0
+  flutter_spinkit: ^4.1.2+1
   flutter_svg: ^0.22.0
   font_awesome_flutter:
   geolocator: 7.6.2
   google_fonts: ^2.1.0
+  google_sign_in: ^4.5.9
+  animated_text_kit: ^4.2.1
+  swipe_to: 0.0.1+8
+  intl:
   json_serializable: ^4.0.1
   lottie: ^1.1.0
   page_transition:
+  rxdart: ^0.26.0
+  sign_in_with_apple: ^3.0.0
   smooth_page_indicator:
   table_calendar: ^2.3.3
   timeago:
   url_launcher:
-  video_player: 2.2.4
-  swipe_to: ^0.1.0-nullsafety.1
-  curved_navigation_bar: ^1.0.1
-  firebase_core: ^1.7.0
-  intl: ^0.17.0
-  cloud_firestore: ^2.5.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -83,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/fonts/
     - assets/images/
     - assets/videos/
     - assets/audios/
@@ -100,6 +105,7 @@ flutter:
     - family: Lazy
       fonts:
         - asset: assets/fonts/lazy_dog.ttf
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

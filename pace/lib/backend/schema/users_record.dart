@@ -39,10 +39,10 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   UsersRecord._();
   factory UsersRecord([void Function(UsersRecordBuilder) updates]) =
-      _$UsersRecord;
+  _$UsersRecord;
 
   static UsersRecord getDocumentFromData(
-          Map<String, dynamic> data, DocumentReference reference) =>
+      Map<String, dynamic> data, DocumentReference reference) =>
       serializers.deserializeWith(serializer,
           {...mapFromFirestore(data), kDocumentReferenceField: reference});
 }

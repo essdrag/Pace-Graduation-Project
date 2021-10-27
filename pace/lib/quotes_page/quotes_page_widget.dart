@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pace/home_page/home_page_widget.dart';
-import 'package:video_player/video_player.dart';
 import 'dart:ui';
 import 'package:swipe_to/swipe_to.dart';
 

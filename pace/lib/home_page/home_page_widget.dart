@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:pace/quotes_page/quotes_page_widget.dart';
 import 'package:pace/s_o_s_page/s_o_s_page_widget.dart';
-import 'package:video_player/video_player.dart';
 import 'dart:ui';
 
 class HomePageWidget extends StatelessWidget{
@@ -24,7 +23,7 @@ class HomePageWidget extends StatelessWidget{
         child: Align(
           alignment: Alignment.topLeft,
           child: Padding(
-              padding: EdgeInsets.fromLTRB(10, 40, 0, 60),
+              padding: EdgeInsets.fromLTRB(10, 40, 0, 80),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +35,7 @@ class HomePageWidget extends StatelessWidget{
                         shape: CircleBorder(),
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Sos()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Sos()));
                       },
                       child: Text(
                         "SOS",
@@ -46,12 +45,13 @@ class HomePageWidget extends StatelessWidget{
                       height: 100,
                       width: 100,
                       child: FlatButton(
+                        splashColor: Colors.white.withOpacity(0.4),
                         onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Quotes()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Quotes()));
                         },
                         shape: CircleBorder(),
                         child: Image.asset('assets/lightbulb.png'),
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsets.only(top:9),
                       )),
                 ],
               )),
