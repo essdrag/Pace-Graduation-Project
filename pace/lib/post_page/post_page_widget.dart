@@ -31,16 +31,7 @@ class _PostState extends State<Post> {
   Widget build(BuildContext context) {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final offWhite = Color(0xfffffefe);
-    String date = "April 1";
     String user = "Anonymouse";
-
-    void _getData(){
-      final title = _titleController.text;
-      final post = _postController.text;
-
-      print("title is: \n$title  post is: \n$post");
-    }
-
 
     CollectionReference posts = FirebaseFirestore.instance.collection('Posts');
     Future<void> addPost() {

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:pace/flutter_flow/flutter_flow_toggle_icon.dart';
-
+import '../backend/backend.dart';
 import '../components/view_to_do_widget.dart';
 import '../diary_page/diary_page_widget.dart';
 import '../favorite_things_page/favorite_things_page_widget.dart';
@@ -40,7 +42,7 @@ class _JournalPageWidgetState extends State<JournalPageWidget> {
       key: scaffoldKey,
       backgroundColor: Color(0xFFFFFEFE),
       body: SingleChildScrollView(
-      child: Column(
+          child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,15 +107,15 @@ class _JournalPageWidgetState extends State<JournalPageWidget> {
             ),
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
             child: Container(
               width: 100,
-              height: 220,
+              height: 250,
               decoration: BoxDecoration(
                 color: Color(0xFFFFFEFE),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 5),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                 child: Stack(
                   children: [
                     Align(
@@ -163,113 +165,153 @@ class _JournalPageWidgetState extends State<JournalPageWidget> {
                         loading: _loadingButton,
                       ),
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(0, 0),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 10),
-                        child: InkWell(
-                          onTap: () async {
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (context) {
-                                return Container(
-                                  height: 500,
-                                  child: ViewToDoWidget(),
-                                );
-                              },
-                            );
-                          },
-                          child: Material(
-                            color: Colors.transparent,
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: Image.asset(
-                                    'assets/images/Image_JournalToDo.png',
-                                  ).image,
-                                ),
-                                gradient: LinearGradient(
-                                  colors: [Color(0xFFBDE0FE), Color(0xFFDAEEFF)],
-                                  stops: [0.06, 1],
-                                  begin: AlignmentDirectional(-1, -0.12),
-                                  end: AlignmentDirectional(1, 0.12),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
+                    Padding(
+                      padding: EdgeInsets.only(top:10, bottom: 10),
+                      child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('ToDoList')
+                          .orderBy("toDoDate", descending: false)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+                          return Text(" ");
+                        } else {
+                          int b = snapshot.data.docs.length;
+                          if (snapshot.data.docs.length > 2)
+                            b = 2;
+                          return ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                              itemCount: b,
+                              itemBuilder: (context, index) {
+                                var a;
+                                DocumentSnapshot ds = snapshot.data.docs[index];
+                                DateTime datestamp = ds["toDoDate"].toDate();
+                                String date = DateFormat("MMMEd").format(datestamp).toString();
+                                if (ds != null){
+                                  a = Align(
+                                    alignment: AlignmentDirectional(0, 0),
                                     child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'toDoName',
-                                            style: FlutterFlowTheme.title2.override(
-                                              fontFamily: 'Martel Sans',
-                                              color: FlutterFlowTheme.chillBlack,
-                                            ),
+                                      padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 10),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          await showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: (context) {
+                                              return Container(
+                                                height: 500,
+                                                child: ViewToDoWidget(),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          elevation: 2,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20),
                                           ),
-                                          Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                                            child: Text('MMMEd',
-                                              style: FlutterFlowTheme.bodyText2.override(
-                                                fontFamily: 'Martel Sans',
-                                                color: FlutterFlowTheme.chillBlack,
+                                          child: Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: 90,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: Image.asset(
+                                                  'assets/images/Image_JournalToDo.png',
+                                                ).image,
                                               ),
+                                              gradient: LinearGradient(
+                                                colors: [Color(0xFFBDE0FE), Color(0xFFDAEEFF)],
+                                                stops: [0.06, 1],
+                                                begin: AlignmentDirectional(-1, -0.12),
+                                                end: AlignmentDirectional(1, 0.12),
+                                              ),
+                                              borderRadius: BorderRadius.circular(20),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
-                                        child: ToggleIcon(
-                                          onPressed: () async { },
-                                          value: true,
-                                          onIcon: Icon(
-                                            Icons.check_circle,
-                                            color: Color(0xFF6096FD),
-                                            size: 25,
-                                          ),
-                                          offIcon: Icon(
-                                            Icons.radio_button_off,
-                                            color: FlutterFlowTheme.chillBlack,
-                                            size: 25,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          ds["toDoName"],
+                                                          style: FlutterFlowTheme.title2.override(
+                                                            fontFamily: 'Martel Sans',
+                                                            color: FlutterFlowTheme.chillBlack,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                                                          child: Text(
+                                                            date,
+                                                            style: FlutterFlowTheme.bodyText2.override(
+                                                              fontFamily: 'Martel Sans',
+                                                              color: FlutterFlowTheme.chillBlack,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Column(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+                                                      child: ToggleIcon(
+                                                        onPressed: () async {
+                                                          final toDoListUpdateData = createToDoListRecordData(
+                                                            toDoState: !ds["toDoState"],
+                                                          );
+                                                          await ds.reference.update(toDoListUpdateData);
+                                                        },
+                                                        value: ds["toDoState"],
+                                                        onIcon: Icon(
+                                                          Icons.check_circle,
+                                                          color: Color(0xFF5B5A5A),
+                                                          size: 25,
+                                                        ),
+                                                        offIcon: Icon(
+                                                          Icons.radio_button_off,
+                                                          color: FlutterFlowTheme.chillBlack,
+                                                          size: 25,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                                      ),
+                                    ),
+                                  );
+                                }else{
+                                  a = Text("");
+                                }
+                                return a;
+                              }
+                              );
+                        }
+                      },
+                    ))
                   ],
                 ),
               ),
             ),
           ),
+
           Container(
             width: 200,
             height: 280,

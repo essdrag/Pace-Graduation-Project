@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import '../flutter_flow/flutter_flow_choice_chips.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class FocusPageWidget extends StatefulWidget {
   FocusPageWidget({Key key}) : super(key: key);
@@ -13,6 +16,21 @@ class FocusPageWidget extends StatefulWidget {
 }
 
 class _FocusPageWidgetState extends State<FocusPageWidget> {
+  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
+    mode: StopWatchMode.countDown,
+  ); // Create instance.
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose(); // Need to call dispose function.
+  }
+
   String choiceChipsValue1;
   String choiceChipsValue2;
   bool _loadingButton1 = false;
@@ -87,14 +105,29 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '00:00:00.00',
-                                textAlign: TextAlign.justify,
-                                style: FlutterFlowTheme.title1.override(
-                                  fontFamily: 'Martel Sans',
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                              StreamBuilder<int>(
+                                stream: _stopWatchTimer.rawTime,
+                                initialData: 0,
+                                builder: (context, snap) {
+                                  final value = snap.data;
+                                  final displayTime =
+                                      StopWatchTimer.getDisplayTime(value);
+                                  return Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Text(
+                                          displayTime,
+                                          style: FlutterFlowTheme.title1.override(
+                                            fontFamily: 'Martel Sans',
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               )
                             ],
                           )
@@ -151,10 +184,14 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                 child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
+                                  onPressed: () async {
+                                    setState(() {
+                                      _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                                      _stopWatchTimer.setPresetTime(mSec: 11234);
+                                      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+                                    });
                                   },
-                                  text: '+1',
+                                  text: '1',
                                   options: FFButtonOptions(
                                     width: 55,
                                     height: 55,
@@ -178,10 +215,14 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                 child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
+                                  onPressed: () async {
+                                    setState(() {
+                                      _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                                      _stopWatchTimer.setPresetTime(mSec: 1234);
+                                      _stopWatchTimer.onExecute.add(StopWatchExecute.start);
+                                    });
                                   },
-                                  text: '+5',
+                                  text: '5',
                                   options: FFButtonOptions(
                                     width: 55,
                                     height: 55,
@@ -205,10 +246,12 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                                 child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
+                                  onPressed: () async {
+                                    _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                                    _stopWatchTimer.setPresetMinuteTime(15);
+                                    _stopWatchTimer.onExecute.add(StopWatchExecute.start);
                                   },
-                                  text: '+15',
+                                  text: '15',
                                   options: FFButtonOptions(
                                     width: 55,
                                     height: 55,
@@ -229,10 +272,12 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                 ),
                               ),
                               FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
+                                onPressed: () async {
+                                  _stopWatchTimer.onExecute.add(StopWatchExecute.reset);
+                                  _stopWatchTimer.setPresetTime(mSec: 60000 * 30);
+                                  _stopWatchTimer.onExecute.add(StopWatchExecute.start);
                                 },
-                                text: '+30',
+                                text: '30',
                                 options: FFButtonOptions(
                                   width: 55,
                                   height: 55,
@@ -425,10 +470,20 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                     print('Button pressed ...');
                                   },
                                   text: '',
-                                  icon: Icon(
-                                    Icons.pause_rounded,
-                                    color: FlutterFlowTheme.chillBlack,
-                                    size: 25,
+                                  icon: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Padding(
+                                        padding:
+                                            EdgeInsets.only(top: 12, right: 2),
+                                        child: SizedBox(
+                                            height: 10,
+                                            width: 10,
+                                            child: Icon(
+                                              Icons.pause_rounded,
+                                              color:
+                                                  FlutterFlowTheme.chillBlack,
+                                              size: 25,
+                                            ))),
                                   ),
                                   options: FFButtonOptions(
                                     width: 50,
@@ -455,10 +510,20 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                     print('Button pressed ...');
                                   },
                                   text: '',
-                                  icon: Icon(
-                                    Icons.play_circle_fill_rounded,
-                                    color: FlutterFlowTheme.chillBlack,
-                                    size: 30,
+                                  icon: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Padding(
+                                        padding:
+                                            EdgeInsets.only(top: 15, right: 2),
+                                        child: SizedBox(
+                                            height: 15,
+                                            width: 15,
+                                            child: Icon(
+                                              Icons.play_circle_fill_rounded,
+                                              color:
+                                                  FlutterFlowTheme.chillBlack,
+                                              size: 30,
+                                            ))),
                                   ),
                                   options: FFButtonOptions(
                                     width: 60,
@@ -482,10 +547,19 @@ class _FocusPageWidgetState extends State<FocusPageWidget> {
                                   print('Button pressed ...');
                                 },
                                 text: '',
-                                icon: Icon(
-                                  Icons.stop_rounded,
-                                  color: FlutterFlowTheme.chillBlack,
-                                  size: 25,
+                                icon: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Padding(
+                                      padding:
+                                          EdgeInsets.only(top: 12, right: 3),
+                                      child: SizedBox(
+                                          height: 10,
+                                          width: 10,
+                                          child: Icon(
+                                            Icons.stop_rounded,
+                                            color: FlutterFlowTheme.chillBlack,
+                                            size: 25,
+                                          ))),
                                 ),
                                 options: FFButtonOptions(
                                   width: 50,

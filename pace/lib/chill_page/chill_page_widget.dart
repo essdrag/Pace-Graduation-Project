@@ -18,6 +18,7 @@ class ChillPageWidget extends StatefulWidget {
 
 class _ChillPageWidgetState extends State<ChillPageWidget>
     with TickerProviderStateMixin {
+
   final animationsMap = {
     'buttonOnActionTriggerAnimation1': AnimationInfo(
       curve: Curves.bounceOut,
@@ -49,11 +50,13 @@ class _ChillPageWidgetState extends State<ChillPageWidget>
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      extendBody: true,
       key: scaffoldKey,
       backgroundColor: Color(0xFFFFFEFE),
       body: Container(
-        width: 375,
+        width: width,
         height: 812,
         decoration: BoxDecoration(
           color: Color(0xFFEEEEEE),

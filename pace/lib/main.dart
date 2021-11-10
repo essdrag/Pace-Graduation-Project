@@ -107,6 +107,7 @@ class _NavBarPageState extends State<NavBarPage> {
     topRight: Radius.circular(30.0),
     ),
     child: BottomNavigationBar(
+      selectedItemColor: Color(0xff5b5a5a),
         currentIndex: tabs.keys.toList().indexOf(_currentPage),
         onTap: (i) => setState(() => _currentPage = tabs.keys.toList()[i]),
         type: BottomNavigationBarType.fixed,
